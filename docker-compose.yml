@@ -1,0 +1,33 @@
+version: "3.7"
+networks:
+  web:
+    external: true
+services:
+  php:
+    hostname: ${domain}_php
+    build: 
+      context: './Build/php/'
+    environment:
+      - PHP_VERSION: ${PHP_VERSION}
+    networks:
+      - web
+    volumes:
+      - ./html/:${root}
+    working_dir: ${root}
+    container_name: "Php.${site_name}"
+  apache:
+    hostname: ${domain}
+    build:
+      context: './Build/apache/' 
+    depends_on:
+      - php
+    networks:
+      - web
+    environment:
+      - www=${www}
+      - APACHE_VERSION=${APACHE_VERSION}
+    working_dir: ${root}
+    volumes:
+      - ./html/:${root}
+    container_name: "Apache.${site_name}"
+
