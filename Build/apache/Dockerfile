@@ -47,12 +47,9 @@ RUN apk add \
   php7-session \
   nano \
   php7-exif;
+  
+RUN apk update
 ENV www=${www}
-ARG WORKDIR="/APP" dic
-RUN mkdir -p $WORKDIR
-COPY /confs/run.sh $WORKDIR/run.sh
-RUN chmod 755 -R $WORKDIR -R
-RUN sh $WORKDIR/run.sh
 RUN sed -i "s/#LoadModule\ rewrite_module/LoadModule\ rewrite_module/" /usr/local/apache2/conf/httpd.conf;
 # Copy apache vhost file to proxy php requests to php-fpm container
 COPY confs/apache.conf /usr/local/apache2/conf/apache.conf

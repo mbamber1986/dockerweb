@@ -122,3 +122,8 @@ labels:
     - "traefik.docker.network=web"
 ```
 as mentioned before the use of ${site_name} and ${domain} are used to give the container a unique name and the correct domain name in order for the  traefik router to function correctly.
+
+## Optional 
+```
+
+```
