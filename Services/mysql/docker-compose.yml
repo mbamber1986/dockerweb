@@ -1,0 +1,30 @@
+services:
+  db:
+    image: ${mysql_type}:${mysql_version}
+    restart: always
+    volumes:
+      - ${mysql_local_storage_path}:/var/lib/mysql
+    networks:
+      - backend
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${mysql_root_password}"
+    container_name: db
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+    ports:
+      - 81:80
+    networks:
+      - backend
+    restart: always
+    container_name: phpmyadmin
+volumes:
+  mysql_data:
+  Hosting:
+networks:
+  backend: 
+    external: true
+    
