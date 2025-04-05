@@ -3,6 +3,8 @@ networks:
     external: true
   backend:
     external: true
+  traefik:
+    external: true
 volumes:
   Hosting:
     external: true
@@ -19,30 +21,31 @@ services:
       - ${localstorage}:${root}
     working_dir: ${root}
     container_name: "Php.${site_name}"
+    restart: "always"
   apache:
-    hostname: ${domain} 
-    build: 
-      context: ./Build/apache
+    hostname: ${domain}
+    image: test/test:beta
     depends_on:
       - php
     networks:
       - web
+      - traefik
       - backend
-    ports:
-      - "80:80"
-      - "443:443"
     environment:
-      - www=${www}
       - APACHE_VERSION=${APACHE_VERSION}
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.http.routers.${site_name}_web.rule=Host(`${domain}`)"
-    #   - "traefik.http.routers.${site_name}_web.entrypoints=web"
-    #   - "traefik.http.routers.${site_name}_websecure.rule=Host(`${domain}`)"
-    #   - "traefik.http.routers.${site_name}_websecure.entrypoints=websecure"
-    #   - "traefik.http.routers.${site_name}_websecure.tls.certresolver=myresolver"
-    #   - "traefik.docker.network=web"
+      - domain=${domain}
+      - www=${www}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${site_name}_web.rule=Host(`${domain}`)"
+      - "traefik.http.routers.${site_name}_web.entrypoints=web"
+      - "traefik.http.routers.${site_name}_websecure.rule=Host(`${domain}`)"
+      - "traefik.http.routers.${site_name}_websecure.entrypoints=websecure"
+      - "traefik.http.routers.${site_name}_websecure.tls.certresolver=myresolver"
+      - "traefik.docker.network=traefik"
+      
     working_dir: ${root}
+    restart: "always"
     volumes:
       - ${localstorage}:${root}
     container_name: "Apache.${site_name}"

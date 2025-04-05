@@ -1,5 +1,6 @@
 ARG PHP_VERSION="${PHP_VERSION}"
 FROM php:${PHP_VERSION:+${PHP_VERSION}-}fpm
+ENV www=/var/www
 RUN apt update -y; \
     apt upgrade -y; \
     apt install nano -y;
